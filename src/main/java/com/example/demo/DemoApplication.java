@@ -6,10 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.r2dbc.core.DatabaseClient;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
 @SpringBootApplication
@@ -20,6 +18,7 @@ public class DemoApplication {
   }
 
   @Bean
+  @Profile("!test")
   CommandLineRunner runner(CustomerRepository customerRepository,
       DatabaseClient databaseClient) {
     var ddl = databaseClient.sql(
@@ -37,13 +36,5 @@ public class DemoApplication {
           .thenMany(all)
           .subscribe(System.out::println);
     };
-  }
-
-  @Bean
-  RouterFunction<ServerResponse> route(CustomerRepository customerRepository) {
-    return RouterFunctions.route()
-        .GET("/rfn/customers",
-            request -> ServerResponse.ok().body(customerRepository.findAll(), Customer.class))
-        .build();
   }
 }
