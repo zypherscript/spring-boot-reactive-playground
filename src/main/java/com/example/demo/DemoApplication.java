@@ -18,7 +18,7 @@ public class DemoApplication {
   }
 
   @Bean
-  @Profile("!test")
+  @Profile("dev")
   CommandLineRunner runner(CustomerRepository customerRepository,
       DatabaseClient databaseClient) {
     var ddl = databaseClient.sql(
