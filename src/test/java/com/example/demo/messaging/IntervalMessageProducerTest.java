@@ -8,7 +8,7 @@ import reactor.test.StepVerifier;
 class IntervalMessageProducerTest {
 
   @Test
-  public void testProduceGreetings() throws InterruptedException {
+  public void testProduceGreetings() {
     var request = new GreetingRequest();
     request.setName("test");
 
