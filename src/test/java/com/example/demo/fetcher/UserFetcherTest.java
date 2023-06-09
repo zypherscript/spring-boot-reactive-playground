@@ -30,11 +30,11 @@ class UserFetcherTest {
   @InjectMocks
   private UserFetcher userFetcher;
 
-  private final String userUrl = "url";
+  private final String jsonplaceholder = "url";
 
   @BeforeEach
   void init() {
-    userFetcher.setUserUrl(userUrl);
+    userFetcher.setJsonplaceholder(jsonplaceholder);
   }
 
   @Test
@@ -43,7 +43,7 @@ class UserFetcherTest {
     var user2 = new UserDto(2, "Jane Smith", "janesmith", "www.janesmith.com");
 
     when(webClient.get()).thenReturn(requestHeadersUriMock);
-    when(requestHeadersUriMock.uri(this.userUrl))
+    when(requestHeadersUriMock.uri(this.jsonplaceholder.concat("/users")))
         .thenReturn(requestHeadersMock);
     when(requestHeadersMock.retrieve()).thenReturn(responseMock);
     when(responseMock.bodyToFlux(UserDto.class)).thenReturn(

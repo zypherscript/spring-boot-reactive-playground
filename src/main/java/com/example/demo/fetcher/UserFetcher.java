@@ -14,16 +14,16 @@ public class UserFetcher {
 
   private final WebClient webClient;
 
-  private String userUrl;
+  private String jsonplaceholder;
 
   @Autowired
-  public void setUserUrl(@Value("${user.url}") String userUrl) {
-    this.userUrl = userUrl;
+  public void setJsonplaceholder(@Value("${jsonplaceholder.url}") String jsonplaceholder) {
+    this.jsonplaceholder = jsonplaceholder;
   }
 
   public Flux<UserDto> retrieveUsers() {
     return webClient.get()
-        .uri(userUrl)
+        .uri(jsonplaceholder.concat("/users"))
         .retrieve()
         .bodyToFlux(UserDto.class);
   }
