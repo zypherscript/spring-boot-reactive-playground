@@ -107,8 +107,8 @@ public class GlobalControllerTest {
   @Test
   public void testUsers() {
     Flux<UserDto> users = Flux.just(
-        new UserDto("John Doe", "johndoe", "www.johndoe.com"),
-        new UserDto("Jane Smith", "janesmith", "www.janesmith.com")
+        new UserDto(1, "John Doe", "johndoe", "www.johndoe.com"),
+        new UserDto(2, "Jane Smith", "janesmith", "www.janesmith.com")
     );
     when(userFetcher.retrieveUsers()).thenReturn(users);
 
