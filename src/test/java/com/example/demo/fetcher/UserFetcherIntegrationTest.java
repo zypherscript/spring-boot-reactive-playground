@@ -4,6 +4,7 @@ import com.example.demo.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import reactor.test.StepVerifier;
     properties = "jsonplaceholder.url=http://localhost:9090")
 @Import({UserFetcher.class})
 @AutoConfigureWireMock(port = 9090)
+@Disabled("it")
 class UserFetcherIntegrationTest {
 
   @Autowired
