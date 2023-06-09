@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.example.demo.dto.UserDto;
+import com.example.demo.fetcher.UserFetcher;
 import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
@@ -35,6 +37,9 @@ public class GlobalControllerTest {
 
   @MockBean
   private RSocketRequester rSocketRequester;
+
+  @MockBean
+  private UserFetcher userFetcher;
 
   @Mock
   private RequestSpec requestSpec;
@@ -97,5 +102,24 @@ public class GlobalControllerTest {
         .expectNext(greetingResponse)
         .thenCancel()
         .verify();
+  }
+
+  @Test
+  public void testUsers() {
+    Flux<UserDto> users = Flux.just(
+        new UserDto("John Doe", "johndoe", "www.johndoe.com"),
+        new UserDto("Jane Smith", "janesmith", "www.janesmith.com")
+    );
+    when(userFetcher.retrieveUsers()).thenReturn(users);
+
+    webTestClient.get().uri("/users")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        .expectBodyList(UserDto.class)
+        .hasSize(2)
+        .contains(Objects.requireNonNull(users.collectList()
+                .block())
+            .toArray(new UserDto[0]));
   }
 }

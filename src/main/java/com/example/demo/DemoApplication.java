@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 @SpringBootApplication
@@ -15,6 +16,11 @@ public class DemoApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(DemoApplication.class, args);
+  }
+
+  @Bean
+  WebClient webClient() {
+    return WebClient.builder().build();
   }
 
   @Bean

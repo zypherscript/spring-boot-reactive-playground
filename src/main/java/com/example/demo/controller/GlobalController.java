@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.UserDto;
+import com.example.demo.fetcher.UserFetcher;
 import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
@@ -21,6 +23,7 @@ public class GlobalController {
   private final CustomerRepository customerRepository;
   private final IntervalMessageProducer intervalMessageProducer;
   private final RSocketRequester rSocketRequester;
+  private final UserFetcher userFetcher;
 
   @GetMapping("/customers")
   Flux<Customer> customers() {
@@ -38,5 +41,10 @@ public class GlobalController {
         .route("greeting-rsocket")
         .data(new GreetingRequest(n))
         .retrieveFlux(GreetingResponse.class);
+  }
+
+  @GetMapping("/users")
+  Flux<UserDto> users() {
+    return userFetcher.retrieveUsers();
   }
 }
