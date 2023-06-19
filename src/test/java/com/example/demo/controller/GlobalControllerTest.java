@@ -23,7 +23,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-@WebFluxTest(GlobalController.class)
+@WebFluxTest(value = GlobalController.class, properties = "jsonplaceholder.test=false")
 public class GlobalControllerTest {
 
   @Autowired

@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-@DataR2dbcTest
+@DataR2dbcTest(properties = "jsonplaceholder.test=false")
 @ActiveProfiles("test")
 class CustomerRepositoryTest {
 
