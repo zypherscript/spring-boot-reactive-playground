@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -50,15 +51,17 @@ public class GlobalControllerTest {
         .zipWith(Flux.just("test1", "test2"), Customer::new);
     when(customerRepository.findAll()).thenReturn(customers);
 
-    webTestClient.get().uri("/customers")
+    var result = webTestClient.get().uri("/customers")
         .exchange()
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
         .expectBodyList(Customer.class)
         .hasSize(2)
-        .contains(Objects.requireNonNull(customers.collectList()
-                .block())
-            .toArray(new Customer[0]));
+        .returnResult();
+
+    assertEquals(result.getResponseBody(), customers.collectList().block());
+    assertEquals(result.getResponseHeaders().getFirst("web-filter"),
+        "web-filter-test");
   }
 
   @Test

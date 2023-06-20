@@ -1,10 +1,11 @@
 package com.example.demo.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
-import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -30,13 +31,14 @@ class RouterTest {
 
     var client = WebTestClient.bindToRouterFunction(router.route(customerRepository))
         .build();
-    client.get().uri("/rfn/customers").accept(MediaType.APPLICATION_JSON)
+    var result = client.get().uri("/rfn/customers").accept(MediaType.APPLICATION_JSON)
         .exchange()
         .expectStatus().isOk()
         .expectBodyList(Customer.class)
         .hasSize(2)
-        .contains(Objects.requireNonNull(customers.collectList()
-                .block())
-            .toArray(new Customer[0]));
+        .returnResult();
+
+    assertEquals(result.getResponseBody(), customers.collectList().block());
+    assertNull(result.getResponseHeaders().getFirst("web-filter"));
   }
 }
