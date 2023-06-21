@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 class RouterTest {
@@ -21,7 +22,7 @@ class RouterTest {
   private CustomerRepository customerRepository;
 
   @Test
-  public void testRoute() {
+  public void testRouteAll() {
     var customers = Flux.range(0, 2)
         .map(Long::valueOf)
         .zipWith(Flux.just("test1", "test2"), Customer::new);
@@ -30,7 +31,7 @@ class RouterTest {
 
     var router = new Router();
 
-    var client = WebTestClient.bindToRouterFunction(router.route(customerRepository))
+    var client = WebTestClient.bindToRouterFunction(router.routeAll(customerRepository))
         .build();
     var result = client.get().uri("/rfn/customers").accept(MediaType.APPLICATION_JSON)
         .exchange()
@@ -41,5 +42,21 @@ class RouterTest {
 
     assertEquals(result.getResponseBody(), customers.collectList().block());
     assertNull(result.getResponseHeaders().getFirst("web-filter"));
+  }
+
+  @Test
+  public void testRoute() {
+    var customer = new Customer(1L, "test");
+    when(customerRepository.findById(1L)).thenReturn(Mono.just(customer));
+
+    var router = new Router();
+
+    var client = WebTestClient.bindToRouterFunction(router.route(customerRepository))
+        .build();
+    client.get().uri("/rfn/customer/1").accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody(Customer.class)
+        .isEqualTo(customer);
   }
 }

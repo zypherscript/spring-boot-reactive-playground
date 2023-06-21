@@ -7,6 +7,8 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -21,9 +23,10 @@ public class DemoApplicationIntegrationTest {
   @Autowired
   private WebTestClient webTestClient;
 
-  @Test
-  public void testCustomers() {
-    webTestClient.get().uri("/customers")
+  @ParameterizedTest
+  @ValueSource(strings = {"", "/rfn"})
+  public void testCustomers(String prefix) {
+    webTestClient.get().uri(prefix + "/customers")
         .exchange()
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -36,9 +39,10 @@ public class DemoApplicationIntegrationTest {
         });
   }
 
-  @Test
-  public void testCustomer() {
-    webTestClient.get().uri("/customer/1")
+  @ParameterizedTest
+  @ValueSource(strings = {"", "/rfn"})
+  public void testCustomer(String prefix) {
+    webTestClient.get().uri(prefix + "/customer/1")
         .exchange()
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -49,9 +53,10 @@ public class DemoApplicationIntegrationTest {
         });
   }
 
-  @Test
-  public void testCustomerNotFound() {
-    webTestClient.get().uri("/customer/-1")
+  @ParameterizedTest
+  @ValueSource(strings = {"", "/rfn"})
+  public void testCustomerNotFound(String prefix) {
+    webTestClient.get().uri(prefix + "/customer/-1")
         .exchange()
         .expectStatus().isNotFound()
         .expectBodyList(Customer.class)
