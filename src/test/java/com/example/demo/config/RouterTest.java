@@ -23,6 +23,7 @@ class RouterTest {
   @Test
   public void testRoute() {
     var customers = Flux.range(0, 2)
+        .map(Long::valueOf)
         .zipWith(Flux.just("test1", "test2"), Customer::new);
     when(customerRepository.findAll())
         .thenReturn(customers);

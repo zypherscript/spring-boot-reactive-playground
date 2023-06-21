@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +29,11 @@ public class GlobalController {
   @GetMapping("/customers")
   Flux<Customer> customers() {
     return customerRepository.findAll();
+  }
+
+  @GetMapping("/customer/{id}")
+  Mono<Customer> customer(@PathVariable Long id) {
+    return customerRepository.findById(id);
   }
 
   @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE, value = "/sse/{n}")

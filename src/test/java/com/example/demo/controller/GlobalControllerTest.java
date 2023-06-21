@@ -22,6 +22,7 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.messaging.rsocket.RSocketRequester.RequestSpec;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @WebFluxTest(value = GlobalController.class, properties = "jsonplaceholder.test=false")
@@ -48,6 +49,7 @@ public class GlobalControllerTest {
   @Test
   public void testCustomers() {
     var customers = Flux.range(0, 2)
+        .map(Long::valueOf)
         .zipWith(Flux.just("test1", "test2"), Customer::new);
     when(customerRepository.findAll()).thenReturn(customers);
 
@@ -60,6 +62,23 @@ public class GlobalControllerTest {
         .returnResult();
 
     assertEquals(result.getResponseBody(), customers.collectList().block());
+    assertEquals(result.getResponseHeaders().getFirst("web-filter"),
+        "web-filter-test");
+  }
+
+  @Test
+  public void testCustomer() {
+    var customer = new Customer(1L, "test");
+    when(customerRepository.findById(1L)).thenReturn(Mono.just(customer));
+
+    var result = webTestClient.get().uri("/customer/1")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        .expectBody(Customer.class)
+        .returnResult();
+
+    assertEquals(result.getResponseBody(), customer);
     assertEquals(result.getResponseHeaders().getFirst("web-filter"),
         "web-filter-test");
   }
