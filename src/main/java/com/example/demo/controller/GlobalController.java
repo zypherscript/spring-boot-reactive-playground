@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.UserDto;
+import com.example.demo.exception.CustomerNotFoundException;
 import com.example.demo.fetcher.UserFetcher;
 import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
@@ -33,7 +34,8 @@ public class GlobalController {
 
   @GetMapping("/customer/{id}")
   Mono<Customer> customer(@PathVariable Long id) {
-    return customerRepository.findById(id);
+    return customerRepository.findById(id)
+        .switchIfEmpty(Mono.error(new CustomerNotFoundException(id)));
   }
 
   @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE, value = "/sse/{n}")

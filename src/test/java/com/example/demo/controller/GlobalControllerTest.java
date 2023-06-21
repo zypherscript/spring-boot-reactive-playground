@@ -53,7 +53,7 @@ public class GlobalControllerTest {
         .zipWith(Flux.just("test1", "test2"), Customer::new);
     when(customerRepository.findAll()).thenReturn(customers);
 
-    var result = webTestClient.get().uri("/customers")
+    var response = webTestClient.get().uri("/customers")
         .exchange()
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -61,8 +61,8 @@ public class GlobalControllerTest {
         .hasSize(2)
         .returnResult();
 
-    assertEquals(result.getResponseBody(), customers.collectList().block());
-    assertEquals(result.getResponseHeaders().getFirst("web-filter"),
+    assertEquals(response.getResponseBody(), customers.collectList().block());
+    assertEquals(response.getResponseHeaders().getFirst("web-filter"),
         "web-filter-test");
   }
 
@@ -71,16 +71,12 @@ public class GlobalControllerTest {
     var customer = new Customer(1L, "test");
     when(customerRepository.findById(1L)).thenReturn(Mono.just(customer));
 
-    var result = webTestClient.get().uri("/customer/1")
+    webTestClient.get().uri("/customer/1")
         .exchange()
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
         .expectBody(Customer.class)
-        .returnResult();
-
-    assertEquals(result.getResponseBody(), customer);
-    assertEquals(result.getResponseHeaders().getFirst("web-filter"),
-        "web-filter-test");
+        .isEqualTo(customer);
   }
 
   @Test

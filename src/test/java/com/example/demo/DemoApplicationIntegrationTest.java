@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
 import org.junit.jupiter.api.Disabled;
@@ -25,7 +28,34 @@ public class DemoApplicationIntegrationTest {
         .expectStatus().isOk()
         .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
         .expectBodyList(Customer.class)
-        .hasSize(2);
+        .consumeWith(req -> {
+          assertNotNull(req.getResponseBody());
+          assertEquals(req.getResponseBody().size(), 2);
+          assertEquals(req.getResponseHeaders().getFirst("web-filter"),
+              "web-filter-test");
+        });
+  }
+
+  @Test
+  public void testCustomer() {
+    webTestClient.get().uri("/customer/1")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        .expectBodyList(Customer.class)
+        .consumeWith(req -> {
+          assertNotNull(req.getResponseBody());
+          assertEquals(req.getResponseBody().size(), 1);
+        });
+  }
+
+  @Test
+  public void testCustomerNotFound() {
+    webTestClient.get().uri("/customer/-1")
+        .exchange()
+        .expectStatus().isNotFound()
+        .expectBodyList(Customer.class)
+        .hasSize(0);
   }
 
   @Test
