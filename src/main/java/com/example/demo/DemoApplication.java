@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.support.WebClientAdapter;
@@ -21,7 +20,6 @@ import reactor.core.publisher.Flux;
 
 @SpringBootApplication
 @Slf4j
-@EnableR2dbcRepositories(basePackages = "com.example.demo.repository")
 public class DemoApplication {
 
   public static void main(String[] args) {
