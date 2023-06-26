@@ -7,7 +7,7 @@ import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
 import com.example.demo.model.GreetingResponse;
-import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.h2.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;

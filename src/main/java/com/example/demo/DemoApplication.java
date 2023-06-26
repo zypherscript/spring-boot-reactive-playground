@@ -2,7 +2,7 @@ package com.example.demo;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
-import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.h2.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
