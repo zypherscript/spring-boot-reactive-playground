@@ -10,7 +10,10 @@ import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
 import com.example.demo.model.GreetingResponse;
+import com.example.demo.model.Post;
 import com.example.demo.repository.h2.CustomerRepository;
+import com.example.demo.repository.mongo.PostRepository;
+import java.util.List;
 import java.util.Objects;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -33,6 +36,9 @@ public class GlobalControllerTest {
 
   @MockBean
   private CustomerRepository customerRepository;
+
+  @MockBean
+  private PostRepository postRepository;
 
   @MockBean
   private IntervalMessageProducer intervalMessageProducer;
@@ -139,5 +145,24 @@ public class GlobalControllerTest {
         .contains(Objects.requireNonNull(users.collectList()
                 .block())
             .toArray(new UserDto[0]));
+  }
+
+  @Test
+  public void testPosts() {
+    var post1 = new Post(null, "Title 1", "Content 1");
+    var post2 = Post.builder().title("Another Title").content("Content 2").build();
+    when(postRepository.findAll()).thenReturn(Flux.just(post1, post2));
+
+    var response = webTestClient.get().uri("/posts")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        .expectBodyList(Post.class)
+        .hasSize(2)
+        .returnResult();
+
+    assertEquals(response.getResponseBody(), List.of(post1, post2));
+    assertEquals(response.getResponseHeaders().getFirst("web-filter"),
+        "web-filter-test");
   }
 }

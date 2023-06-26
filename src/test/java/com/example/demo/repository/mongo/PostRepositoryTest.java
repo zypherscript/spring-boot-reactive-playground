@@ -13,7 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = DemoApplication.class)
-@ActiveProfiles("test")
+@ActiveProfiles("test-mongo")
 class PostRepositoryTest {
 
   @Autowired

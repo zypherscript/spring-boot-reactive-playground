@@ -7,7 +7,9 @@ import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
 import com.example.demo.model.GreetingResponse;
+import com.example.demo.model.Post;
 import com.example.demo.repository.h2.CustomerRepository;
+import com.example.demo.repository.mongo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
@@ -26,6 +28,7 @@ public class GlobalController {
   private final IntervalMessageProducer intervalMessageProducer;
   private final RSocketRequester rSocketRequester;
   private final UserFetcher userFetcher;
+  private final PostRepository postRepository;
 
   @GetMapping("/customers")
   Flux<Customer> customers() {
@@ -54,5 +57,15 @@ public class GlobalController {
   @GetMapping("/users")
   Flux<UserDto> users() {
     return userFetcher.retrieveUsers();
+  }
+
+  @GetMapping("/posts")
+  Flux<Post> posts() {
+    return postRepository.findAll();
+  }
+
+  @GetMapping("/posts/{text}")
+  Flux<Post> postsByTitleContains(@PathVariable String text) {
+    return postRepository.findByTitleContains(text);
   }
 }

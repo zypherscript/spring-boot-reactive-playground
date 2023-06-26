@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
+import com.example.demo.model.Post;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Map;
@@ -114,5 +115,20 @@ public class DemoApplicationIntegrationTest {
         .uri("/multipart/{id}", fileId)
         .exchange()
         .expectStatus().isOk();
+  }
+
+  @Test
+  public void testPostByTitleContains() {
+    webTestClient.get().uri("/posts/one")
+        .exchange()
+        .expectStatus().isOk()
+        .expectHeader().contentType(MediaType.APPLICATION_JSON_VALUE)
+        .expectBodyList(Post.class)
+        .consumeWith(req -> {
+          assertNotNull(req.getResponseBody());
+          assertEquals(req.getResponseBody().size(), 1);
+          assertEquals(req.getResponseHeaders().getFirst("web-filter"),
+              "web-filter-test");
+        });
   }
 }

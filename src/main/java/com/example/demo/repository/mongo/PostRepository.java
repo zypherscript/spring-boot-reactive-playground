@@ -6,5 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface PostRepository extends ReactiveMongoRepository<Post, String> {
 
-  Flux<Post> findByTitleContains(String title);
+  Flux<Post> findByTitleContains(String text);
 }
