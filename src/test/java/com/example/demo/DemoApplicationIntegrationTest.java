@@ -19,6 +19,8 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MultiValueMap;
@@ -27,6 +29,7 @@ import org.springframework.util.MultiValueMap;
 @ActiveProfiles("test")
 @Disabled("it")
 @Slf4j
+@DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class DemoApplicationIntegrationTest {
 
   @Autowired

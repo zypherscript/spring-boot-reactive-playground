@@ -5,14 +5,12 @@ import com.example.demo.repository.mongo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-@Profile("test")
 class PostDataInitializer implements CommandLineRunner {
 
   private final PostRepository postRepository;
