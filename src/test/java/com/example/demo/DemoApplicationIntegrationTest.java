@@ -88,7 +88,7 @@ public class DemoApplicationIntegrationTest {
 
   private MultiValueMap<String, HttpEntity<?>> generateBody() {
     var builder = new MultipartBodyBuilder();
-    builder.part("fileParts", new ClassPathResource("/foo.txt", DemoApplicationTests.class));
+    builder.part("fileParts", new ClassPathResource("/foo.txt"));
     return builder.build();
   }
 

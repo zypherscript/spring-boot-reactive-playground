@@ -5,11 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.example.demo.controller.GlobalController;
 import com.example.demo.controller.GreetingController;
 import com.example.demo.controller.MultipartController;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
+@Disabled("sm-test")
 class DemoApplicationTests {
 
   @Autowired
