@@ -20,6 +20,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,6 +32,7 @@ import org.springframework.util.MultiValueMap;
 @Disabled("it")
 @Slf4j
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
+@WithMockUser
 public class DemoApplicationIntegrationTest {
 
   @Autowired
