@@ -7,7 +7,7 @@ import com.example.demo.messaging.IntervalMessageProducer;
 import com.example.demo.model.Customer;
 import com.example.demo.model.GreetingRequest;
 import com.example.demo.model.GreetingResponse;
-import com.example.demo.model.Post;
+import com.example.demo.model.mongo.Post;
 import com.example.demo.repository.h2.CustomerRepository;
 import com.example.demo.repository.mongo.PostRepository;
 import lombok.RequiredArgsConstructor;

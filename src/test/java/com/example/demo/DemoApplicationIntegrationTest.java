@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
-import com.example.demo.model.Post;
+import com.example.demo.model.mongo.Post;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Map;

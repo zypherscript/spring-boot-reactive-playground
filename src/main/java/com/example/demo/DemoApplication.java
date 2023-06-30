@@ -2,7 +2,10 @@ package com.example.demo;
 
 import com.example.demo.dto.UserDto;
 import com.example.demo.model.Customer;
+import com.example.demo.model.mongo.User;
 import com.example.demo.repository.h2.CustomerRepository;
+import com.example.demo.repository.mongo.UserRepository;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
@@ -56,7 +59,7 @@ public class DemoApplication {
   }
 
   @Bean
-  @Profile("test")
+  @Profile({"test", "init"})
   CommandLineRunner runner(CustomerRepository customerRepository,
       DatabaseClient databaseClient) {
     var ddl = databaseClient.sql(
@@ -73,6 +76,24 @@ public class DemoApplication {
           .thenMany(saved)
           .thenMany(all)
           .subscribe(System.out::println);
+    };
+  }
+
+  @Bean
+  @Profile("init")
+  CommandLineRunner userDataInitializer(UserRepository userRepository) {
+    return args -> {
+      userRepository
+          .deleteAll()
+          .thenMany(
+              userRepository.save(new User(null, "user", "{noop}pwd", true, List.of("USER")))
+          )
+          .log()
+          .subscribe(
+              null,
+              null,
+              () -> log.info("done user initialization...")
+          );
     };
   }
 }

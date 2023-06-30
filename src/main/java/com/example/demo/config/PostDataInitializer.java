@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.model.Post;
+import com.example.demo.model.mongo.Post;
 import com.example.demo.repository.mongo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
