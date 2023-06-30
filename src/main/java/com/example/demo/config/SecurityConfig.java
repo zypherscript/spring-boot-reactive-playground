@@ -5,6 +5,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 import com.example.demo.repository.mongo.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
@@ -22,8 +23,9 @@ public class SecurityConfig {
   public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
     http
         .csrf(CsrfSpec::disable)
-        .authorizeExchange(authorizeExchanges ->
-            authorizeExchanges.anyExchange().authenticated())
+        .authorizeExchange(authorizeExchanges -> authorizeExchanges
+            .pathMatchers(HttpMethod.GET, "/posts").permitAll()
+            .anyExchange().authenticated())
         .httpBasic(withDefaults())
         .formLogin(withDefaults());
     return http.build();
