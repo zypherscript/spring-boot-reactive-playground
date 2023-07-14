@@ -10,19 +10,19 @@ import reactor.core.publisher.Mono;
 
 @Repository
 @RequiredArgsConstructor
-class RedisPostRepository {
+public class RedisPostRepository {
 
   private final ReactiveRedisOperations<String, RedisPost> template;
 
-  Flux<RedisPost> findAll() {
+  public Flux<RedisPost> findAll() {
     return template.<String, RedisPost>opsForHash().values("posts");
   }
 
-  Mono<RedisPost> findById(String id) {
+  public Mono<RedisPost> findById(String id) {
     return template.<String, RedisPost>opsForHash().get("posts", id);
   }
 
-  Mono<RedisPost> save(RedisPost post) {
+  public Mono<RedisPost> save(RedisPost post) {
     if (post.getId() != null) {
       String id = UUID.randomUUID().toString();
       post.setId(id);
@@ -33,12 +33,12 @@ class RedisPostRepository {
 
   }
 
-  Mono<Void> deleteById(String id) {
+  public Mono<Void> deleteById(String id) {
     return template.<String, RedisPost>opsForHash().remove("posts", id)
         .flatMap(p -> Mono.<Void>empty());
   }
 
-  Mono<Boolean> deleteAll() {
+  public Mono<Boolean> deleteAll() {
     return template.<String, RedisPost>opsForHash().delete("posts");
   }
 }
